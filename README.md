@@ -1,6 +1,8 @@
 go-kabusapi
 ===========
 
+![test](https://github.com/hori-ryota/go-kabusapi/workflows/test-go/badge.svg)
+
 go-kabusapi is a client library for [kabuステーション API](https://kabucom.github.io/kabusapi/ptal/index.html) written in Go.
 
 Warning; WIP
