@@ -74,6 +74,9 @@ func (c Client) executeRESTRequest(req *http.Request, res interface{}) error {
 		e.HTTPStatusCode = resp.StatusCode
 		return e
 	}
+	if res == nil {
+		return nil
+	}
 	if err := json.NewDecoder(resp.Body).Decode(res); err != nil {
 		return fmt.Errorf("failed to decode response: %w", err)
 	}

@@ -28,6 +28,32 @@ func NewCancelOrderRequest(
 	}
 }
 
+func NewSymbolItem(
+	symbol Symbol,
+	exchange Exchange,
+) SymbolItem {
+	return SymbolItem{
+		Symbol:   symbol,
+		Exchange: exchange,
+	}
+}
+
+func NewRegisterSymbolsRequest(
+	symbols []SymbolItem,
+) RegisterSymbolsRequest {
+	return RegisterSymbolsRequest{
+		Symbols: symbols,
+	}
+}
+
+func NewUnregisterSymbolsRequest(
+	symbols []SymbolItem,
+) UnregisterSymbolsRequest {
+	return UnregisterSymbolsRequest{
+		Symbols: symbols,
+	}
+}
+
 func NewClient() Client {
 	return Client{
 		restBaseURL: url.URL{Scheme: "http", Host: "localhost:18081", Path: "kabusapi"},
@@ -46,5 +72,13 @@ func NewDate(
 		Year:  year,
 		Month: month,
 		Day:   day,
+	}
+}
+
+func NewDateTime(
+	time time.Time,
+) DateTime {
+	return DateTime{
+		Time: time,
 	}
 }

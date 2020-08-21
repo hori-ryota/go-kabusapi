@@ -3,6 +3,7 @@ package kabusapi
 import (
 	fmt "fmt"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -150,12 +151,16 @@ type Date struct {
 }
 
 func (d Date) MarshalJSON() ([]byte, error) {
-	return []byte(fmt.Sprintf(
-		"%04d%02d%02d",
+	s := strings.TrimLeft(fmt.Sprintf(
+		"%d%02d%02d",
 		d.Year,
 		d.Month,
 		d.Day,
-	)), nil
+	), "0")
+	if len(s) == 0 {
+		s = "0"
+	}
+	return []byte(s), nil
 }
 
 func (d *Date) UnmarshalJSON(b []byte) error {
@@ -166,6 +171,28 @@ func (d *Date) UnmarshalJSON(b []byte) error {
 	d.Year = int32(num / 10000)
 	d.Month = time.Month(num / 100 % 100)
 	d.Day = int32(num % 100)
+	return nil
+}
+
+func (d Date) ToTime(loc *time.Location) time.Time {
+	return time.Date(int(d.Year), d.Month, int(d.Day), 0, 0, 0, 0, loc)
+}
+
+//genconstructor
+type DateTime struct {
+	time.Time `required:""`
+}
+
+func (d DateTime) MarshalJSON() ([]byte, error) {
+	return []byte(d.Format(`"2006-01-02T15:04:05.999999"`)), nil
+}
+
+func (d *DateTime) UnmarshalJSON(b []byte) error {
+	t, err := time.Parse(`"2006-01-02T15:04:05.999999"`, string(b))
+	if err != nil {
+		return err
+	}
+	d.Time = t
 	return nil
 }
 
@@ -330,73 +357,146 @@ type BisCategory string
 const (
 	// 水産・農林業
 	FisheriesAndForestries BisCategory = "0050"
+	// 鉱業
+	Mining BisCategory = "1050"
+	// 建設業
+	ConstructionIndustry BisCategory = "2050"
+	// 食料品
+	Grocery BisCategory = "3050"
+	// 繊維製品
+	TextileProducts BisCategory = "3100"
+	// パルプ・紙
+	PulpAndPaper BisCategory = "3150"
+	// 化学
+	Chemistry BisCategory = "3200"
+	// 医薬品
+	Pharmaceuticals BisCategory = "3250"
+	// 石油・石炭製品
+	OilAndCoalProducts BisCategory = "3300"
+	// ゴム製品
+	RubberProducts BisCategory = "3350"
+	// ガラス・土石製品
+	GlassAndStoneProducts BisCategory = "3400"
+	// 鉄鋼
+	Steel BisCategory = "3450"
+	// 非鉄金属
+	NonFerrousMetal BisCategory = "3500"
+	// 金属製品
+	MetalProducts BisCategory = "3550"
+	// 機械
+	Machine BisCategory = "3600"
+	// 電気機器
+	ElectricalEquipment BisCategory = "3650"
+	// 輸送用機器
+	TransportEquipment BisCategory = "3700"
+	// 精密機器
+	PrecisionEquipment BisCategory = "3750"
+	// その他製品
+	OtherProducts BisCategory = "3800"
+	// 電気・ガス業
+	ElectricityAndGasIndustry BisCategory = "4050"
+	// 陸運業
+	LandTransportation BisCategory = "5050"
+	// 海運業
+	Shipping BisCategory = "5100"
+	// 空運業
+	AritTransportation BisCategory = "5150"
+	// 倉庫・運輸関連業
+	WarehouseAndTransportationRelatedBusiness BisCategory = "5200"
+	// 情報・通信業
+	InformationAndCommunicationIndustry BisCategory = "5250"
+	// 卸売業
+	Wholesale BisCategory = "6050"
+	// 小売業
+	Retail BisCategory = "6100"
+	// 銀行業
+	Banking BisCategory = "7050"
+	// 証券、商品先物取引業
+	SecuritiesAndCommodityFuturesTradingBusiness BisCategory = "7100"
+	// 保険業
+	InsuranceIndustry BisCategory = "7150"
+	// その他金融業
+	OtherFinancialServices BisCategory = "7200"
+	// 不動産業
+	RealEstateIndustry BisCategory = "8050"
+	// サービス業
+	ServiceIndustry BisCategory = "9050"
+	// その他
+	Other BisCategory = "9999"
+)
 
-	// TODO
+// 呼値コード
+type PriceRangeCode string
 
-	// // 鉱業
-	// BisCategory = "1050"
-	// // 建設業
-	// BisCategory = "2050"
-	// // 食料品
-	// BisCategory = "3050"
-	// // 繊維製品
-	// BisCategory = "3100"
-	// // パルプ・紙
-	// BisCategory = "3150"
-	// // 化学
-	// BisCategory = "3200"
-	// // 医薬品
-	// BisCategory = "3250"
-	// // 石油・石炭製品
-	// BisCategory = "3300"
-	// // ゴム製品
-	// BisCategory = "3350"
-	// // ガラス・土石製品
-	// BisCategory = "3400"
-	// // 鉄鋼
-	// BisCategory = "3450"
-	// // 非鉄金属
-	// BisCategory = "3500"
-	// // 金属製品
-	// BisCategory = "3550"
-	// // 機械
-	// BisCategory = "3600"
-	// // 電気機器
-	// BisCategory = "3650"
-	// // 輸送用機器
-	// BisCategory = "3700"
-	// // 精密機器
-	// BisCategory = "3750"
-	// // その他製品
-	// BisCategory = "3800"
-	// // 電気・ガス業
-	// BisCategory = "4050"
-	// // 陸運業
-	// BisCategory = "5050"
-	// // 海運業
-	// BisCategory = "5100"
-	// // 空運業
-	// BisCategory = "5150"
-	// // 倉庫・運輸関連業
-	// BisCategory = "5200"
-	// // 情報・通信業
-	// BisCategory = "5250"
-	// // 卸売業
-	// BisCategory = "6050"
-	// // 小売業
-	// BisCategory = "6100"
-	// // 銀行業
-	// BisCategory = "7050"
-	// // 証券、商品先物取引業
-	// BisCategory = "7100"
-	// // 保険業
-	// BisCategory = "7150"
-	// // その他金融業
-	// BisCategory = "7200"
-	// // 不動産業
-	// BisCategory = "8050"
-	// // サービス業
-	// BisCategory = "9050"
-	// // その他
-	// BisCategory = "9999"
+const (
+	PriceRangeCode10000 PriceRangeCode = "10000"
+	PriceRangeCode10003 PriceRangeCode = "10003"
+)
+
+// 注文状態
+type OrderState int32
+
+const (
+	// 待機（発注待機）
+	WaitingForOrder OrderState = 1
+	// 処理中（発注送信中）
+	SendingOrder OrderState = 2
+	// 処理済（発注済・訂正済）
+	Ordered OrderState = 3
+	// 訂正取消送信中
+	SendingCancellation OrderState = 4
+	// 終了（発注エラー・取消済・全約定・失効・期限切れ）
+	EndOrder OrderState = 5
+)
+
+// 執行条件
+type OrderType int32
+
+const (
+	// ザラバ
+	Zaraba OrderType = 1
+	// 寄り
+	Yori OrderType = 2
+	// 引け
+	Hike OrderType = 3
+	// 不成
+	Funari OrderType = 4
+)
+
+// 注文明細種別
+type RecType int32
+
+const (
+	// 受付
+	RecTypeReceived RecType = 1
+	// 繰越
+	RecTypeCarryover RecType = 2
+	// 期限切れ
+	RecTypeExpired RecType = 3
+	// 発注
+	RecTypeOrder RecType = 4
+	// 訂正
+	RecTypeCorrection RecType = 5
+	// 取消
+	RecTypeCancel RecType = 6
+	// 失効
+	RecTypeRevocation RecType = 7
+	// 約定
+	RecTypeExecution RecType = 8
+)
+
+// 注文状態
+type OrderDetailState int32
+
+const (
+	// 待機（発注待機）
+	OrderDetailStateWaiting OrderDetailState = 1
+	// 処理中（発注送信中・訂正送信中・取消送信中）
+	OrderDetailStateInProcess OrderDetailState = 2
+	// 処理済（発注済・訂正済・取消済・全約定・期限切れ）
+	OrderDetailStateProcessed OrderDetailState = 3
+	// エラー
+	OrderDetailStateError OrderDetailState = 4
+	// 削除済み
+	OrderDetailStateDeleted OrderDetailState = 5
 )

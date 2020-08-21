@@ -146,6 +146,7 @@ func RESTTestServer(
 func JSONEqWithoutResultCode(t *testing.T, expect string, actual interface{}) {
 	t.Helper()
 	expect = strings.ReplaceAll(expect, `"Result": 0,`, "")
+	expect = strings.ReplaceAll(expect, `"ResultCode": 0,`, "")
 	JSONEq(t, expect, actual)
 }
 
@@ -173,7 +174,7 @@ func InitializeClient(
 		w.Header().Set("Content-Type", "application/json")
 		_, err := w.Write([]byte(`
 {
-	"Result": 0,
+	"ResultCode": 0,
 	"Token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 }
 `))

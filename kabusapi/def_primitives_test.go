@@ -19,6 +19,15 @@ func TestDate(t *testing.T) {
 		require.NoError(t, err)
 		assert.JSONEq(t, `{"Date":20200821}`, string(b))
 	})
+	t.Run("MarshalJSON ZeroValue", func(t *testing.T) {
+		date := kabusapi.NewDate(0, 0, 0)
+		j := map[string]interface{}{
+			"Date": date,
+		}
+		b, err := json.Marshal(j)
+		require.NoError(t, err)
+		assert.JSONEq(t, `{"Date":0}`, string(b))
+	})
 	t.Run("UnmarshalJSON", func(t *testing.T) {
 		j := struct {
 			Date kabusapi.Date

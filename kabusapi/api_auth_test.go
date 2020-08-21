@@ -16,7 +16,7 @@ func TestClient_IssuingToken(t *testing.T) {
 `
 	respBody := `
 {
-	"Result": 0,
+	"ResultCode": 0,
 	"Token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 }
 `
