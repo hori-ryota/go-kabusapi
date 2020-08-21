@@ -6,6 +6,8 @@ on:
       - '**.go'
       - '**.mod'
       - '**.sum'
+      - '**.yaml'
+      - '**.yml'
 
 jobs:
   go-test-lint:
