@@ -1,0 +1,32 @@
+name: test-go
+
+on:
+  push:
+    paths:
+      - '**.go'
+      - '**.mod'
+      - '**.sum'
+
+jobs:
+  go-test-lint:
+    runs-on: ubuntu-latest
+    name: test for go
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v1
+        with:
+          go-version: '1.15'
+
+      - name: go mod cache
+        id: go-mod-cache
+        uses: actions/cache@v1
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-${{ hashFiles('go.sum') }}
+      - if: steps.go-mod-cache.outputs.cache-hit != 'true'
+        run: go mod download
+
+      - name: go test
+        run: go test -v -race ./...
