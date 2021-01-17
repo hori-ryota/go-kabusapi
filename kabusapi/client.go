@@ -9,25 +9,50 @@ import (
 	"net/http"
 	"net/url"
 	"path"
+	"runtime"
 )
 
 const version = "0.0.1"
 
 // Client is implementation of kabuステーションAPI (v1.0) client.
-//genconstructor
 type Client struct {
-	restBaseURL url.URL `required:"url.URL{Scheme: \"http\", Host: \"localhost:18081\", Path: \"kabusapi\"}" setter:"OverwriteRestURLBase"`
-	pushBaseURL url.URL `required:"url.URL{Scheme: \"ws\", Host: \"localhost:18081\", Path: \"kabusapi/websocket\"}" setter:"OverwritePushURLBase"`
-	apiToken    APIToken
-	userAgent   string       `required:"fmt.Sprintf(\"KabusAPIGoClient/%s (%s)\", version, runtime.Version())" setter:""`
-	httpClient  *http.Client `required:"http.DefaultClient" setter:""`
+	restBaseURL url.URL
+	pushBaseURL url.URL
+	apiToken    string
+	userAgent   string
+	httpClient  *http.Client
+}
+
+func NewClient() Client {
+	return Client{
+		restBaseURL: url.URL{Scheme: "http", Host: "localhost:18080", Path: "kabusapi"},
+		pushBaseURL: url.URL{Scheme: "ws", Host: "localhost:18080", Path: "kabusapi/websocket"},
+		userAgent:   fmt.Sprintf("KabusAPIGoClient/%s (%s)", version, runtime.Version()),
+		httpClient:  http.DefaultClient,
+	}
+}
+
+func (c *Client) OverwriteRestURLBase(s url.URL) {
+	c.restBaseURL = s
+}
+
+func (c *Client) OverwritePushURLBase(s url.URL) {
+	c.pushBaseURL = s
+}
+
+func (c *Client) SetUserAgent(s string) {
+	c.userAgent = s
+}
+
+func (c *Client) SetHTTPClient(s *http.Client) {
+	c.httpClient = s
 }
 
 // NewTestingClient is constructor of Client for testing
 func NewTestingClient() Client {
 	c := NewClient()
-	c.OverwriteRestURLBase(url.URL{Scheme: "http", Host: "localhost:18082", Path: "kabusapi"})
-	c.OverwriteRestURLBase(url.URL{Scheme: "ws", Host: "localhost:18082", Path: "kabusapi/websocket"})
+	c.OverwriteRestURLBase(url.URL{Scheme: "http", Host: "localhost:18081", Path: "kabusapi"})
+	c.OverwritePushURLBase(url.URL{Scheme: "ws", Host: "localhost:18081", Path: "kabusapi/websocket"})
 	return c
 }
 
@@ -35,11 +60,13 @@ func (c *Client) Initialize(
 	ctx context.Context,
 	apiPassword string,
 ) error {
-	res, err := c.IssuingToken(ctx, apiPassword)
+	res, err := c.PostToken(ctx, RequestToken{
+		APIPassword: apiPassword,
+	})
 	if err != nil {
-		return fmt.Errorf("failed to IssuingToken: %w", err)
+		return fmt.Errorf("failed to RequestToken: %w", err)
 	}
-	c.apiToken = res.Token
+	c.apiToken = *res.Token
 	return nil
 }
 
@@ -66,12 +93,16 @@ func (c Client) executeRESTRequest(req *http.Request, res interface{}) error {
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode >= 400 {
-		e := ErrorResponse{}
-		if err := json.NewDecoder(resp.Body).Decode(&e); err != nil {
+		er := ErrorResponse{}
+		if err := json.NewDecoder(resp.Body).Decode(&er); err != nil {
 			return fmt.Errorf("failed to request: failed to decode requestError: %w", err)
 		}
-		e.HTTPStatus = resp.Status
-		e.HTTPStatusCode = resp.StatusCode
+		e := Error{
+			Code:           er.Code,
+			Message:        er.Message,
+			HTTPStatus:     resp.Status,
+			HTTPStatusCode: resp.StatusCode,
+		}
 		return e
 	}
 	if res == nil {

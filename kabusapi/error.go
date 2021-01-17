@@ -2,16 +2,14 @@ package kabusapi
 
 import fmt "fmt"
 
-type ErrorCode int32
-
-type ErrorResponse struct {
-	Code           ErrorCode
+type Error struct {
+	Code           ErrorResponseCode
 	Message        string
 	HTTPStatusCode int
 	HTTPStatus     string
 }
 
-func (e ErrorResponse) Error() string {
+func (e Error) Error() string {
 	return fmt.Sprintf(
 		"%d %s: %d: %s",
 		e.HTTPStatusCode,
