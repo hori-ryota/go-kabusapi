@@ -37,6 +37,12 @@ const (
 	GetBoardOfParamExchange夜間 GetBoardOfParamExchange = "24"
 )
 
+// P returns pointer of GetBoardOfParamExchange.
+func (e GetBoardOfParamExchange) P() *GetBoardOfParamExchange {
+	v := e
+	return &v
+}
+
 // 時価情報・板情報
 // 指定した銘柄の時価情報・板情報を取得します
 func (c Client) GetBoardOf(
@@ -407,6 +413,12 @@ const (
 	GetSymbolOfParamExchange夜間 GetSymbolOfParamExchange = "24"
 )
 
+// P returns pointer of GetSymbolOfParamExchange.
+func (e GetSymbolOfParamExchange) P() *GetSymbolOfParamExchange {
+	v := e
+	return &v
+}
+
 // 銘柄情報
 // 指定した銘柄情報を取得します
 func (c Client) GetSymbolOf(
@@ -620,6 +632,12 @@ const (
 	GetWalletCashOfParamExchange札証 GetWalletCashOfParamExchange = "6"
 )
 
+// P returns pointer of GetWalletCashOfParamExchange.
+func (e GetWalletCashOfParamExchange) P() *GetWalletCashOfParamExchange {
+	v := e
+	return &v
+}
+
 // 取引余力（現物）（銘柄指定）
 // 指定した銘柄の取引余力（現物）を取得します
 func (c Client) GetWalletCashOf(
@@ -663,6 +681,12 @@ const (
 	GetWalletFutureOfParamExchange夜間 GetWalletFutureOfParamExchange = "24"
 )
 
+// P returns pointer of GetWalletFutureOfParamExchange.
+func (e GetWalletFutureOfParamExchange) P() *GetWalletFutureOfParamExchange {
+	v := e
+	return &v
+}
+
 // 取引余力（先物）（銘柄指定）
 // 指定した銘柄の取引余力（先物）を取得します
 func (c Client) GetWalletFutureOf(
@@ -702,6 +726,12 @@ const (
 	// |3|名証|
 	GetWalletMarginOfParamExchange名証 GetWalletMarginOfParamExchange = "3"
 )
+
+// P returns pointer of GetWalletMarginOfParamExchange.
+func (e GetWalletMarginOfParamExchange) P() *GetWalletMarginOfParamExchange {
+	v := e
+	return &v
+}
 
 // 取引余力（信用）（銘柄指定）
 // 指定した銘柄の取引余力（信用）を取得します
@@ -745,6 +775,12 @@ const (
 	// |24|夜間|
 	GetWalletOptionOfParamExchange夜間 GetWalletOptionOfParamExchange = "24"
 )
+
+// P returns pointer of GetWalletOptionOfParamExchange.
+func (e GetWalletOptionOfParamExchange) P() *GetWalletOptionOfParamExchange {
+	v := e
+	return &v
+}
 
 // 取引余力（オプション）（銘柄指定）
 // 指定した銘柄の取引余力（オプション）を取得します

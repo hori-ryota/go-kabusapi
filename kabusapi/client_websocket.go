@@ -7,7 +7,7 @@ func (c Client) SubscribePushStream() *PushStreamScanner {
 }
 
 func NewPushStreamScanner(url string) *PushStreamScanner {
-	ws, err := websocket.Dial(url, "", "")
+	ws, err := websocket.Dial(url, "", "http://example.com")
 	return &PushStreamScanner{
 		ws:  ws,
 		err: err,

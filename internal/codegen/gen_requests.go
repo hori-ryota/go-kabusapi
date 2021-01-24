@@ -120,6 +120,12 @@ const (
 	{{$enumType}}{{NormalizeEnumName .Name}} {{$enumType}} = {{if eq $baseType "string"}}"{{.Value}}"{{else}}{{.Value}}{{end}}
 	{{- end}}
 )
+
+// P returns pointer of {{.ToGoType}}.
+func (e {{.ToGoType}}) P() *{{.ToGoType}} {
+	v := e
+	return &v
+}
 {{- end}}{{/* with .Type */}}
 {{- end}}{{/* if IsEnum .Type */}}
 {{- end}}{{/* range .PathParams */}}

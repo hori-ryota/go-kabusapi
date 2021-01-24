@@ -161,6 +161,12 @@ const (
 	RequestSendOrderExchange札証 RequestSendOrderExchange = 6
 )
 
+// P returns pointer of RequestSendOrderExchange.
+func (e RequestSendOrderExchange) P() *RequestSendOrderExchange {
+	v := e
+	return &v
+}
+
 // 商品種別
 // |定義値|説明|
 // |-|-|
@@ -171,6 +177,12 @@ const (
 	// |1|株式|
 	RequestSendOrderSecurityType株式 RequestSendOrderSecurityType = 1
 )
+
+// P returns pointer of RequestSendOrderSecurityType.
+func (e RequestSendOrderSecurityType) P() *RequestSendOrderSecurityType {
+	v := e
+	return &v
+}
 
 // 売買区分
 // |定義値|説明|
@@ -185,6 +197,12 @@ const (
 	// |2|買|
 	RequestSendOrderSide買 RequestSendOrderSide = "2"
 )
+
+// P returns pointer of RequestSendOrderSide.
+func (e RequestSendOrderSide) P() *RequestSendOrderSide {
+	v := e
+	return &v
+}
 
 // 信用区分
 // |定義値|説明|
@@ -202,6 +220,12 @@ const (
 	// |3|返済|
 	RequestSendOrderCashMargin返済 RequestSendOrderCashMargin = 3
 )
+
+// P returns pointer of RequestSendOrderCashMargin.
+func (e RequestSendOrderCashMargin) P() *RequestSendOrderCashMargin {
+	v := e
+	return &v
+}
 
 // 信用取引区分
 // ※現物取引の場合は指定不要。
@@ -221,6 +245,12 @@ const (
 	// |3|一般信用（売短）|
 	RequestSendOrderMarginTradeType一般信用_売短 RequestSendOrderMarginTradeType = 3
 )
+
+// P returns pointer of RequestSendOrderMarginTradeType.
+func (e RequestSendOrderMarginTradeType) P() *RequestSendOrderMarginTradeType {
+	v := e
+	return &v
+}
 
 // 受渡区分
 // ※現物買は指定必須。
@@ -242,6 +272,12 @@ const (
 	// |2|お預り金|
 	RequestSendOrderDelivTypeお預り金 RequestSendOrderDelivType = 2
 )
+
+// P returns pointer of RequestSendOrderDelivType.
+func (e RequestSendOrderDelivType) P() *RequestSendOrderDelivType {
+	v := e
+	return &v
+}
 
 // 資産区分（預り区分）
 // ※現物買は、指定必須。
@@ -266,6 +302,12 @@ const (
 	RequestSendOrderFundType信用取引 RequestSendOrderFundType = "11"
 )
 
+// P returns pointer of RequestSendOrderFundType.
+func (e RequestSendOrderFundType) P() *RequestSendOrderFundType {
+	v := e
+	return &v
+}
+
 // 口座種別
 // |定義値|説明|
 // |-|-|
@@ -282,6 +324,12 @@ const (
 	// |12|法人|
 	RequestSendOrderAccountType法人 RequestSendOrderAccountType = 12
 )
+
+// P returns pointer of RequestSendOrderAccountType.
+func (e RequestSendOrderAccountType) P() *RequestSendOrderAccountType {
+	v := e
+	return &v
+}
 
 // 決済順序
 // ※信用返済の場合、必須。
@@ -317,6 +365,12 @@ const (
 	// |7|損益（低い順）、日付（新しい順）|
 	RequestSendOrderClosePositionOrder損益_低い順__日付_新しい順 RequestSendOrderClosePositionOrder = 7
 )
+
+// P returns pointer of RequestSendOrderClosePositionOrder.
+func (e RequestSendOrderClosePositionOrder) P() *RequestSendOrderClosePositionOrder {
+	v := e
+	return &v
+}
 
 // 執行条件
 // |定義値|説明|”Price"の指定|
@@ -367,6 +421,12 @@ const (
 	// |27|IOC指値|発注したい金額|
 	RequestSendOrderFrontOrderTypeIOC指値 RequestSendOrderFrontOrderType = 27
 )
+
+// P returns pointer of RequestSendOrderFrontOrderType.
+func (e RequestSendOrderFrontOrderType) P() *RequestSendOrderFrontOrderType {
+	v := e
+	return &v
+}
 
 // RequestSendOrderDerivFuture is definition of RequestSendOrderDerivFuture.
 type RequestSendOrderDerivFuture struct {
@@ -462,6 +522,12 @@ const (
 	RequestSendOrderDerivFutureExchange夜間 RequestSendOrderDerivFutureExchange = 24
 )
 
+// P returns pointer of RequestSendOrderDerivFutureExchange.
+func (e RequestSendOrderDerivFutureExchange) P() *RequestSendOrderDerivFutureExchange {
+	v := e
+	return &v
+}
+
 // 取引区分
 // |定義値|説明|
 // |-|-|
@@ -475,6 +541,12 @@ const (
 	// |2|返済|
 	RequestSendOrderDerivFutureTradeType返済 RequestSendOrderDerivFutureTradeType = 2
 )
+
+// P returns pointer of RequestSendOrderDerivFutureTradeType.
+func (e RequestSendOrderDerivFutureTradeType) P() *RequestSendOrderDerivFutureTradeType {
+	v := e
+	return &v
+}
 
 // 有効期間条件
 // |定義値|説明|
@@ -493,6 +565,12 @@ const (
 	RequestSendOrderDerivFutureTimeInForceFOK RequestSendOrderDerivFutureTimeInForce = 3
 )
 
+// P returns pointer of RequestSendOrderDerivFutureTimeInForce.
+func (e RequestSendOrderDerivFutureTimeInForce) P() *RequestSendOrderDerivFutureTimeInForce {
+	v := e
+	return &v
+}
+
 // 売買区分
 // |定義値|説明|
 // |-|-|
@@ -506,6 +584,12 @@ const (
 	// |2|買|
 	RequestSendOrderDerivFutureSide買 RequestSendOrderDerivFutureSide = "2"
 )
+
+// P returns pointer of RequestSendOrderDerivFutureSide.
+func (e RequestSendOrderDerivFutureSide) P() *RequestSendOrderDerivFutureSide {
+	v := e
+	return &v
+}
 
 // 決済順序
 // ※ClosePositionOrderとClosePositionsはどちらか一方のみ指定可能。
@@ -541,6 +625,12 @@ const (
 	RequestSendOrderDerivFutureClosePositionOrder損益_低い順__日付_新しい順 RequestSendOrderDerivFutureClosePositionOrder = 7
 )
 
+// P returns pointer of RequestSendOrderDerivFutureClosePositionOrder.
+func (e RequestSendOrderDerivFutureClosePositionOrder) P() *RequestSendOrderDerivFutureClosePositionOrder {
+	v := e
+	return &v
+}
+
 // 執行条件
 // |定義値|説明|”Price”の指定|
 // |-|-|-|
@@ -560,6 +650,12 @@ const (
 	// |120|成行（マーケットオーダー）|0|
 	RequestSendOrderDerivFutureFrontOrderType成行_マーケットオーダー RequestSendOrderDerivFutureFrontOrderType = 120
 )
+
+// P returns pointer of RequestSendOrderDerivFutureFrontOrderType.
+func (e RequestSendOrderDerivFutureFrontOrderType) P() *RequestSendOrderDerivFutureFrontOrderType {
+	v := e
+	return &v
+}
 
 // RequestSendOrderDerivOption is definition of RequestSendOrderDerivOption.
 type RequestSendOrderDerivOption struct {
@@ -655,6 +751,12 @@ const (
 	RequestSendOrderDerivOptionExchange夜間 RequestSendOrderDerivOptionExchange = 24
 )
 
+// P returns pointer of RequestSendOrderDerivOptionExchange.
+func (e RequestSendOrderDerivOptionExchange) P() *RequestSendOrderDerivOptionExchange {
+	v := e
+	return &v
+}
+
 // 取引区分
 // |定義値|説明|
 // |-|-|
@@ -668,6 +770,12 @@ const (
 	// |2|返済|
 	RequestSendOrderDerivOptionTradeType返済 RequestSendOrderDerivOptionTradeType = 2
 )
+
+// P returns pointer of RequestSendOrderDerivOptionTradeType.
+func (e RequestSendOrderDerivOptionTradeType) P() *RequestSendOrderDerivOptionTradeType {
+	v := e
+	return &v
+}
 
 // 有効期間条件
 // |定義値|説明|
@@ -686,6 +794,12 @@ const (
 	RequestSendOrderDerivOptionTimeInForceFOK RequestSendOrderDerivOptionTimeInForce = 3
 )
 
+// P returns pointer of RequestSendOrderDerivOptionTimeInForce.
+func (e RequestSendOrderDerivOptionTimeInForce) P() *RequestSendOrderDerivOptionTimeInForce {
+	v := e
+	return &v
+}
+
 // 売買区分
 // |定義値|説明|
 // |-|-|
@@ -699,6 +813,12 @@ const (
 	// |2|買|
 	RequestSendOrderDerivOptionSide買 RequestSendOrderDerivOptionSide = "2"
 )
+
+// P returns pointer of RequestSendOrderDerivOptionSide.
+func (e RequestSendOrderDerivOptionSide) P() *RequestSendOrderDerivOptionSide {
+	v := e
+	return &v
+}
 
 // 決済順序
 // ※ClosePositionOrderとClosePositionsはどちらか一方のみ指定可能。
@@ -734,6 +854,12 @@ const (
 	RequestSendOrderDerivOptionClosePositionOrder損益_低い順__日付_新しい順 RequestSendOrderDerivOptionClosePositionOrder = 7
 )
 
+// P returns pointer of RequestSendOrderDerivOptionClosePositionOrder.
+func (e RequestSendOrderDerivOptionClosePositionOrder) P() *RequestSendOrderDerivOptionClosePositionOrder {
+	v := e
+	return &v
+}
+
 // 執行条件
 // |定義値|説明|”Price”の指定|
 // |-|-|-|
@@ -753,6 +879,12 @@ const (
 	// |120|成行（マーケットオーダー）|0|
 	RequestSendOrderDerivOptionFrontOrderType成行_マーケットオーダー RequestSendOrderDerivOptionFrontOrderType = 120
 )
+
+// P returns pointer of RequestSendOrderDerivOptionFrontOrderType.
+func (e RequestSendOrderDerivOptionFrontOrderType) P() *RequestSendOrderDerivOptionFrontOrderType {
+	v := e
+	return &v
+}
 
 // Positions is definition of Positions.
 type Positions struct {
@@ -829,6 +961,12 @@ const (
 	// |24|夜間|
 	SymbolsItemExchange夜間 SymbolsItemExchange = 24
 )
+
+// P returns pointer of SymbolsItemExchange.
+func (e SymbolsItemExchange) P() *SymbolsItemExchange {
+	v := e
+	return &v
+}
 
 // TokenSuccess is definition of TokenSuccess.
 type TokenSuccess struct {
@@ -1157,6 +1295,12 @@ const (
 	BoardSuccessExchange夜間 BoardSuccessExchange = 24
 )
 
+// P returns pointer of BoardSuccessExchange.
+func (e BoardSuccessExchange) P() *BoardSuccessExchange {
+	v := e
+	return &v
+}
+
 // 現値前値比較
 // |定義値|説明|
 // |-|-|
@@ -1209,6 +1353,12 @@ const (
 	// |0431|ダイナミックサーキットブレーカ引け|
 	BoardSuccessCurrentPriceChangeStatusダイナミックサーキットブレーカ引け BoardSuccessCurrentPriceChangeStatus = "0431"
 )
+
+// P returns pointer of BoardSuccessCurrentPriceChangeStatus.
+func (e BoardSuccessCurrentPriceChangeStatus) P() *BoardSuccessCurrentPriceChangeStatus {
+	v := e
+	return &v
+}
 
 // 現値ステータス
 // |定義値|説明|
@@ -1287,6 +1437,12 @@ const (
 	BoardSuccessCurrentPriceStatus板寄せ約定 BoardSuccessCurrentPriceStatus = 23
 )
 
+// P returns pointer of BoardSuccessCurrentPriceStatus.
+func (e BoardSuccessCurrentPriceStatus) P() *BoardSuccessCurrentPriceStatus {
+	v := e
+	return &v
+}
+
 // 最良売気配フラグ
 // ※株式・先物・オプション銘柄の場合のみ
 // |定義値|説明|
@@ -1332,6 +1488,12 @@ const (
 	BoardSuccessBidSign買い上がり売り下がり中 BoardSuccessBidSign = "0120"
 )
 
+// P returns pointer of BoardSuccessBidSign.
+func (e BoardSuccessBidSign) P() *BoardSuccessBidSign {
+	v := e
+	return &v
+}
+
 // 最良買気配フラグ
 // ※株式・先物・オプション銘柄の場合のみ
 // |定義値|説明|
@@ -1376,6 +1538,12 @@ const (
 	// |0120|買い上がり売り下がり中|
 	BoardSuccessAskSign買い上がり売り下がり中 BoardSuccessAskSign = "0120"
 )
+
+// P returns pointer of BoardSuccessAskSign.
+func (e BoardSuccessAskSign) P() *BoardSuccessAskSign {
+	v := e
+	return &v
+}
 
 // Sell1 is definition of Sell1.
 // 売気配数量1本目
@@ -1452,6 +1620,12 @@ const (
 	// |0120|買い上がり売り下がり中|
 	Sell1Sign買い上がり売り下がり中 Sell1Sign = "0120"
 )
+
+// P returns pointer of Sell1Sign.
+func (e Sell1Sign) P() *Sell1Sign {
+	v := e
+	return &v
+}
 
 // Sell2 is definition of Sell2.
 // 売気配数量2本目
@@ -1628,6 +1802,12 @@ const (
 	Buy1Sign買い上がり売り下がり中 Buy1Sign = "0120"
 )
 
+// P returns pointer of Buy1Sign.
+func (e Buy1Sign) P() *Buy1Sign {
+	v := e
+	return &v
+}
+
 // Buy2 is definition of Buy2.
 // 買気配数量2本目
 type Buy2 struct {
@@ -1778,6 +1958,12 @@ const (
 	// |24|夜間|
 	RegistListItemExchange夜間 RegistListItemExchange = 24
 )
+
+// P returns pointer of RegistListItemExchange.
+func (e RegistListItemExchange) P() *RegistListItemExchange {
+	v := e
+	return &v
+}
 
 // UnregisterAllSuccess is definition of UnregisterAllSuccess.
 type UnregisterAllSuccess struct {
@@ -1994,6 +2180,12 @@ const (
 	SymbolSuccessExchange夜間 SymbolSuccessExchange = 24
 )
 
+// P returns pointer of SymbolSuccessExchange.
+func (e SymbolSuccessExchange) P() *SymbolSuccessExchange {
+	v := e
+	return &v
+}
+
 // 業種コード名
 // ※株式銘柄の場合のみ
 // |定義値|説明|
@@ -2105,6 +2297,12 @@ const (
 	SymbolSuccessBisCategoryその他 SymbolSuccessBisCategory = "9999      "
 )
 
+// P returns pointer of SymbolSuccessBisCategory.
+func (e SymbolSuccessBisCategory) P() *SymbolSuccessBisCategory {
+	v := e
+	return &v
+}
+
 // 呼値グループ
 // ※株式・先物・オプション銘柄の場合のみ
 // |呼値コード|値段の水準|呼値単位|
@@ -2163,6 +2361,12 @@ const (
 	SymbolSuccessPriceRangeGroup17163 SymbolSuccessPriceRangeGroup = "17163"
 )
 
+// P returns pointer of SymbolSuccessPriceRangeGroup.
+func (e SymbolSuccessPriceRangeGroup) P() *SymbolSuccessPriceRangeGroup {
+	v := e
+	return &v
+}
+
 // 原資産コード
 // ※先物・オプション銘柄の場合のみ
 // |定義値|説明|
@@ -2199,6 +2403,12 @@ const (
 	SymbolSuccessUnderlyerTOPIX_Core30 SymbolSuccessUnderlyer = "TOPIXCORE30"
 )
 
+// P returns pointer of SymbolSuccessUnderlyer.
+func (e SymbolSuccessUnderlyer) P() *SymbolSuccessUnderlyer {
+	v := e
+	return &v
+}
+
 // プット/コール区分
 // ※オプション銘柄の場合のみ
 // |定義値|説明|
@@ -2213,6 +2423,12 @@ const (
 	// |2|コール|
 	SymbolSuccessPutOrCallコール SymbolSuccessPutOrCall = 2
 )
+
+// P returns pointer of SymbolSuccessPutOrCall.
+func (e SymbolSuccessPutOrCall) P() *SymbolSuccessPutOrCall {
+	v := e
+	return &v
+}
 
 // OrdersSuccessItem is definition of OrdersSuccessItem.
 type OrdersSuccessItem struct {
@@ -2342,6 +2558,12 @@ const (
 	OrdersSuccessItemState終了_発注エラー_取消済_全約定_失効_期限切れ OrdersSuccessItemState = 5
 )
 
+// P returns pointer of OrdersSuccessItemState.
+func (e OrdersSuccessItemState) P() *OrdersSuccessItemState {
+	v := e
+	return &v
+}
+
 // 注文状態
 // |定義値|説明|
 // |-|-|
@@ -2364,6 +2586,12 @@ const (
 	// |5|終了（発注エラー・取消済・全約定・失効・期限切れ）|
 	OrdersSuccessItemOrderState終了_発注エラー_取消済_全約定_失効_期限切れ OrdersSuccessItemOrderState = 5
 )
+
+// P returns pointer of OrdersSuccessItemOrderState.
+func (e OrdersSuccessItemOrderState) P() *OrdersSuccessItemOrderState {
+	v := e
+	return &v
+}
 
 // 執行条件
 // |定義値|説明|
@@ -2390,6 +2618,12 @@ const (
 	// |6|IOC|
 	OrdersSuccessItemOrdTypeIOC OrdersSuccessItemOrdType = 6
 )
+
+// P returns pointer of OrdersSuccessItemOrdType.
+func (e OrdersSuccessItemOrdType) P() *OrdersSuccessItemOrdType {
+	v := e
+	return &v
+}
 
 // 市場コード
 // |定義値|説明|
@@ -2423,6 +2657,12 @@ const (
 	OrdersSuccessItemExchange夜間 OrdersSuccessItemExchange = 24
 )
 
+// P returns pointer of OrdersSuccessItemExchange.
+func (e OrdersSuccessItemExchange) P() *OrdersSuccessItemExchange {
+	v := e
+	return &v
+}
+
 // 有効期間条件
 // ※先物・オプション銘柄の場合のみ
 // |定義値|説明|
@@ -2441,6 +2681,12 @@ const (
 	OrdersSuccessItemTimeInForceFOK OrdersSuccessItemTimeInForce = 3
 )
 
+// P returns pointer of OrdersSuccessItemTimeInForce.
+func (e OrdersSuccessItemTimeInForce) P() *OrdersSuccessItemTimeInForce {
+	v := e
+	return &v
+}
+
 // 売買区分
 // |定義値|説明|
 // |-|-|
@@ -2455,6 +2701,12 @@ const (
 	OrdersSuccessItemSide買 OrdersSuccessItemSide = "2"
 )
 
+// P returns pointer of OrdersSuccessItemSide.
+func (e OrdersSuccessItemSide) P() *OrdersSuccessItemSide {
+	v := e
+	return &v
+}
+
 // 取引区分
 // |定義値|説明|
 // |-|-|
@@ -2468,6 +2720,12 @@ const (
 	// |3|返済|
 	OrdersSuccessItemCashMargin返済 OrdersSuccessItemCashMargin = 3
 )
+
+// P returns pointer of OrdersSuccessItemCashMargin.
+func (e OrdersSuccessItemCashMargin) P() *OrdersSuccessItemCashMargin {
+	v := e
+	return &v
+}
 
 // 口座種別
 // |定義値|説明|
@@ -2486,6 +2744,12 @@ const (
 	OrdersSuccessItemAccountType法人 OrdersSuccessItemAccountType = 12
 )
 
+// P returns pointer of OrdersSuccessItemAccountType.
+func (e OrdersSuccessItemAccountType) P() *OrdersSuccessItemAccountType {
+	v := e
+	return &v
+}
+
 // 受渡区分
 // |定義値|説明|
 // |-|-|
@@ -2499,6 +2763,12 @@ const (
 	// |2|お預り金|
 	OrdersSuccessItemDelivTypeお預り金 OrdersSuccessItemDelivType = 2
 )
+
+// P returns pointer of OrdersSuccessItemDelivType.
+func (e OrdersSuccessItemDelivType) P() *OrdersSuccessItemDelivType {
+	v := e
+	return &v
+}
 
 // 信用取引区分
 // |定義値|説明|
@@ -2516,6 +2786,12 @@ const (
 	// |3|一般信用（売短）|
 	OrdersSuccessItemMarginTradeType一般信用_売短 OrdersSuccessItemMarginTradeType = 3
 )
+
+// P returns pointer of OrdersSuccessItemMarginTradeType.
+func (e OrdersSuccessItemMarginTradeType) P() *OrdersSuccessItemMarginTradeType {
+	v := e
+	return &v
+}
 
 // DetailsItem is definition of DetailsItem.
 type DetailsItem struct {
@@ -2608,6 +2884,12 @@ const (
 	DetailsItemRecType約定 DetailsItemRecType = 8
 )
 
+// P returns pointer of DetailsItemRecType.
+func (e DetailsItemRecType) P() *DetailsItemRecType {
+	v := e
+	return &v
+}
+
 // 状態
 // |定義値|説明|
 // |-|-|
@@ -2631,6 +2913,12 @@ const (
 	DetailsItemState削除済み DetailsItemState = 5
 )
 
+// P returns pointer of DetailsItemState.
+func (e DetailsItemState) P() *DetailsItemState {
+	v := e
+	return &v
+}
+
 // 執行条件
 // |定義値|説明|
 // |-|-|
@@ -2653,6 +2941,12 @@ const (
 	// |5|対当指値|
 	DetailsItemOrdType対当指値 DetailsItemOrdType = 5
 )
+
+// P returns pointer of DetailsItemOrdType.
+func (e DetailsItemOrdType) P() *DetailsItemOrdType {
+	v := e
+	return &v
+}
 
 // PositionsSuccessItem is definition of PositionsSuccessItem.
 type PositionsSuccessItem struct {
@@ -2749,6 +3043,12 @@ const (
 	PositionsSuccessItemAccountType法人 PositionsSuccessItemAccountType = 12
 )
 
+// P returns pointer of PositionsSuccessItemAccountType.
+func (e PositionsSuccessItemAccountType) P() *PositionsSuccessItemAccountType {
+	v := e
+	return &v
+}
+
 // 市場コード
 // |定義値|説明|
 // |-|-|
@@ -2778,6 +3078,12 @@ const (
 	PositionsSuccessItemExchange夜間 PositionsSuccessItemExchange = 24
 )
 
+// P returns pointer of PositionsSuccessItemExchange.
+func (e PositionsSuccessItemExchange) P() *PositionsSuccessItemExchange {
+	v := e
+	return &v
+}
+
 // 売買区分
 // |定義値|説明|
 // |-|-|
@@ -2791,6 +3097,12 @@ const (
 	// |2|買|
 	PositionsSuccessItemSide買 PositionsSuccessItemSide = "2"
 )
+
+// P returns pointer of PositionsSuccessItemSide.
+func (e PositionsSuccessItemSide) P() *PositionsSuccessItemSide {
+	v := e
+	return &v
+}
 
 // 信用取引区分
 // ※信用の場合のみ
@@ -2809,6 +3121,12 @@ const (
 	// |3|一般信用（売短）|
 	PositionsSuccessItemMarginTradeType一般信用_売短 PositionsSuccessItemMarginTradeType = 3
 )
+
+// P returns pointer of PositionsSuccessItemMarginTradeType.
+func (e PositionsSuccessItemMarginTradeType) P() *PositionsSuccessItemMarginTradeType {
+	v := e
+	return &v
+}
 
 // SymbolNameSuccess is definition of SymbolNameSuccess.
 type SymbolNameSuccess struct {
@@ -3011,3 +3329,9 @@ const (
 	// |4004002|取消不可||
 	ErrorResponseCode取消不可 ErrorResponseCode = 4004002
 )
+
+// P returns pointer of ErrorResponseCode.
+func (e ErrorResponseCode) P() *ErrorResponseCode {
+	v := e
+	return &v
+}
