@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 	"sort"
+	"strings"
 
 	strcase "github.com/hori-ryota/go-strcase"
 )
@@ -13,6 +14,10 @@ func ParseMethods(y YAMLDoc) ([]MethodDef, error) {
 
 	methods := make([]MethodDef, 0, len(y.Paths)*4)
 	for pat, mm := range y.Paths {
+		if strings.Contains(pat, "/ranking") {
+			// NOTE: oneofなどの経過を見守ってから実装に加える [【要望】oneofの仕様を避けたい、用途ごとにAPIを分割して欲しい · Issue \#234 · kabucom/kabusapi](https://github.com/kabucom/kabusapi/issues/234)
+			continue
+		}
 		for httpMethod, yp := range mm {
 			// def method type
 			var methodName string
@@ -30,13 +35,18 @@ func ParseMethods(y YAMLDoc) ([]MethodDef, error) {
 				)
 			}
 
+			for i, p := range yp.Parameters {
+				yp.Parameters[i].Schema.Name = p.Name
+				yp.Parameters[i].Schema.Description = p.Description
+			}
+
 			// parse PathParams
 			pathParams := make([]PathParamDef, 0, len(yp.Parameters))
 			for _, p := range yp.Parameters {
 				if p.In != "path" {
 					continue
 				}
-				t, err := YAMLObjectDefToTypeDef(p.YAMLObjectDef, &YAMLObjectDef{
+				t, err := YAMLSchemaDefToTypeDef(p.Schema, &YAMLSchemaDef{
 					Name: methodName + "Param",
 				})
 				if err != nil {
@@ -58,7 +68,7 @@ func ParseMethods(y YAMLDoc) ([]MethodDef, error) {
 					if p.In != "query" {
 						continue
 					}
-					t, err := YAMLObjectDefToTypeDef(p.YAMLObjectDef, &YAMLObjectDef{
+					t, err := YAMLSchemaDefToTypeDef(p.Schema, &YAMLSchemaDef{
 						Name: inputTypeName,
 					})
 					if err != nil {
@@ -67,7 +77,7 @@ func ParseMethods(y YAMLDoc) ([]MethodDef, error) {
 					queryParams = append(queryParams, PropertyDef{
 						Name:        p.Name,
 						Type:        t,
-						Required:    p.Required.Bool,
+						Required:    p.Required,
 						Description: p.Description,
 					})
 				}
@@ -79,17 +89,13 @@ func ParseMethods(y YAMLDoc) ([]MethodDef, error) {
 					}
 				}
 			} else {
-				for _, p := range yp.Parameters {
-					if p.In != "body" {
-						continue
-					}
-					inputType = RefDef(p.Schema.Ref)
-					break
+				if c, ok := yp.RequestBody.Content["application/json"]; ok {
+					inputType = RefDef(c.Schema.Ref)
 				}
 			}
 
 			// parse OutputType
-			outputType := RefDef(yp.Responses["200"].Schema.Ref)
+			outputType := RefDef(yp.Responses["200"].Content["application/json"].Schema.Ref)
 
 			methods = append(methods, MethodDef{
 				Name:        methodName,

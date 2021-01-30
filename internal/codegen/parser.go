@@ -10,11 +10,11 @@ import (
 )
 
 type KabusAPIDocument struct {
-	Methods     []MethodDef
-	Definitions []DefinitionDef
+	Methods []MethodDef
+	Schemas []SchemaDef
 }
 
-type DefinitionDef struct {
+type SchemaDef struct {
 	Name string
 	Type TypeDef
 }
@@ -25,14 +25,19 @@ func ParseKabusAPIDocument(r io.Reader) (KabusAPIDocument, error) {
 		return KabusAPIDocument{}, fmt.Errorf("failed to decode yaml: %w", err)
 	}
 
-	definitions := make([]DefinitionDef, len(y.Definitions))
-	for i, d := range y.Definitions {
+	schemas := make([]SchemaDef, 0, len(y.Components.Schemas))
+	for _, d := range y.Components.Schemas {
+		if strings.Contains(d.Name, "Ranking") {
+			// NOTE: oneofなどの経過を見守ってから実装に加える [【要望】oneofの仕様を避けたい、用途ごとにAPIを分割して欲しい · Issue \#234 · kabucom/kabusapi](https://github.com/kabucom/kabusapi/issues/234)
+			continue
+		}
 		if d.Name == "ErrorResponse" {
 			// 特別対応
 			var codeListText string
 			for i, p := range d.Properties {
 				if p.Name == "Message" {
-					ind := strings.Index(p.Description, "|")
+					// error code用のテーブルは無視する
+					ind := strings.Index(p.Description, "<table>")
 					codeListText = p.Description[ind:]
 					d.Properties[i].Description = strings.TrimSpace(p.Description[:ind])
 					d.Properties[i].Required = YAMLRequiredUnmarshaller{
@@ -49,14 +54,14 @@ func ParseKabusAPIDocument(r io.Reader) (KabusAPIDocument, error) {
 				}
 			}
 		}
-		t, err := YAMLObjectDefToTypeDef(d, nil)
+		t, err := YAMLSchemaDefToTypeDef(d, nil)
 		if err != nil {
 			return KabusAPIDocument{}, fmt.Errorf("failed to parse definition: %+v: %w", d, err)
 		}
-		definitions[i] = DefinitionDef{
+		schemas = append(schemas, SchemaDef{
 			Name: d.Name,
 			Type: t,
-		}
+		})
 	}
 
 	methods, err := ParseMethods(y)
@@ -65,17 +70,17 @@ func ParseKabusAPIDocument(r io.Reader) (KabusAPIDocument, error) {
 	}
 
 	return KabusAPIDocument{
-		Definitions: definitions,
-		Methods:     methods,
+		Schemas: schemas,
+		Methods: methods,
 	}, nil
 }
 
-func YAMLObjectDefToTypeDef(yd YAMLObjectDef, parentYD *YAMLObjectDef) (TypeDef, error) {
+func YAMLSchemaDefToTypeDef(yd YAMLSchemaDef, parentYD *YAMLSchemaDef) (TypeDef, error) {
 	if yd.Ref != "" {
 		return yd.Ref, nil
 	}
 
-	if strings.Contains(yd.Description, "|-|-|") && yd.Name != "Message" {
+	if strings.Contains(yd.Description, "<table>") && yd.Name != "Message" {
 		// enum
 		return parseEnum(yd, parentYD.Name)
 	}
@@ -102,9 +107,9 @@ func YAMLObjectDefToTypeDef(yd YAMLObjectDef, parentYD *YAMLObjectDef) (TypeDef,
 
 		properties := make([]PropertyDef, len(yd.Properties))
 		for i, yp := range yd.Properties {
-			t, err := YAMLObjectDefToTypeDef(yp, &yd)
+			t, err := YAMLSchemaDefToTypeDef(yp, &yd)
 			if err != nil {
-				return nil, fmt.Errorf("failed to YAMLObjectDefToTypeDef as object at property %d: %w", i, err)
+				return nil, fmt.Errorf("failed to YAMLSchemaDefToTypeDef as object at property %d: %w", i, err)
 			}
 			if yp.Name == "Message" {
 				// 特別対応
@@ -124,15 +129,15 @@ func YAMLObjectDefToTypeDef(yd YAMLObjectDef, parentYD *YAMLObjectDef) (TypeDef,
 			Properties:  properties,
 		}, nil
 	case "array":
-		t, err := YAMLObjectDefToTypeDef(*yd.Items, &yd)
+		t, err := YAMLSchemaDefToTypeDef(*yd.Items, &yd)
 		if err != nil {
-			return nil, fmt.Errorf("failed to YAMLObjectDefToTypeDef as array: %w", err)
+			return nil, fmt.Errorf("failed to YAMLSchemaDefToTypeDef as array: %w", err)
 		}
 		return ArrayDef{
 			Elem: t,
 		}, nil
 	default:
-		return nil, fmt.Errorf("unknown YAMLObjectDef.Type: %s", yd.Type)
+		return nil, fmt.Errorf("unknown YAMLSchemaDef.Type: %s", yd.Type)
 	}
 }
 
@@ -145,27 +150,37 @@ func containsString(ss []string, s string) bool {
 	return false
 }
 
-func parseEnum(yd YAMLObjectDef, prefix string) (EnumDef, error) {
+func parseEnum(yd YAMLSchemaDef, prefix string) (EnumDef, error) {
 	scanner := bufio.NewScanner(strings.NewReader(yd.Description))
 	for scanner.Scan() {
-		if strings.Contains(scanner.Text(), "|-|-|") {
+		if strings.Contains(scanner.Text(), "<tbody>") {
 			break
 		}
 	}
 	enums := make([]EnumValue, 0, 20)
 	for scanner.Scan() {
-		vv := strings.Split(scanner.Text(), "|")
+		if strings.Contains(scanner.Text(), "</tbody>") {
+			break
+		}
+		vv := strings.Split(scanner.Text(), "</td>")
+		for i, v := range vv {
+			v = strings.TrimSpace(v)
+			v = strings.ReplaceAll(v, "<tr>", "")
+			v = strings.ReplaceAll(v, "</tr>", "")
+			v = strings.ReplaceAll(v, "<td>", "")
+			vv[i] = v
+		}
 		enums = append(enums, EnumValue{
-			Name:        vv[2],
-			Value:       vv[1],
+			Name:        vv[1],
+			Value:       vv[0],
 			Description: scanner.Text(),
 		})
 	}
-	baseType, err := YAMLObjectDefToTypeDef(YAMLObjectDef{
+	baseType, err := YAMLSchemaDefToTypeDef(YAMLSchemaDef{
 		Type: yd.Type,
 	}, nil)
 	if err != nil {
-		return EnumDef{}, fmt.Errorf("failed to YAMLObjectDefToTypeDef as enum: %w", err)
+		return EnumDef{}, fmt.Errorf("failed to YAMLSchemaDefToTypeDef as enum: %w", err)
 	}
 	switch yd.Name {
 	// 特別対応が必要なものを個別処理

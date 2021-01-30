@@ -1,8 +1,8 @@
 package main
 
-func (doc KabusAPIDocument) TypedArrays() []DefinitionDef {
-	typedArrays := make([]DefinitionDef, 0, len(doc.Definitions))
-	for _, d := range doc.Definitions {
+func (doc KabusAPIDocument) TypedArrays() []SchemaDef {
+	typedArrays := make([]SchemaDef, 0, len(doc.Schemas))
+	for _, d := range doc.Schemas {
 		if _, ok := d.Type.(ArrayDef); ok {
 			typedArrays = append(typedArrays, d)
 		}
@@ -11,8 +11,8 @@ func (doc KabusAPIDocument) TypedArrays() []DefinitionDef {
 }
 
 func (doc KabusAPIDocument) TypedStructs() []StructDef {
-	typedStructs := make([]StructDef, 0, len(doc.Definitions)*2)
-	for _, d := range doc.Definitions {
+	typedStructs := make([]StructDef, 0, len(doc.Schemas)*2)
+	for _, d := range doc.Schemas {
 		if a, ok := d.Type.(ArrayDef); ok {
 			if ss, ok := a.Elem.(StructDef); ok {
 				typedStructs = append(typedStructs, ss)
