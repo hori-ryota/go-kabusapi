@@ -9,15 +9,15 @@ import (
 )
 
 // 市場コード
-// |定義値|説明|
-// |-|-|
-// |1|東証|
-// |3|名証|
-// |5|福証|
-// |6|札証|
-// |2|日通し|
-// |23|日中|
-// |24|夜間|
+// |定義値|説明  |
+// |------|------|
+// |1     |東証  |
+// |3     |名証  |
+// |5     |福証  |
+// |6     |札証  |
+// |2     |日通し|
+// |23    |日中  |
+// |24    |夜間  |
 type GetBoardOfParamExchange string
 
 const (
@@ -45,6 +45,8 @@ func (e GetBoardOfParamExchange) P() *GetBoardOfParamExchange {
 
 // 時価情報・板情報
 // 指定した銘柄の時価情報・板情報を取得します
+// レスポンスの一部にnullが発生した場合、該当銘柄を銘柄登録をしてから、
+// 再度時価情報・板情報APIを実行してください。
 func (c Client) GetBoardOf(
 	ctx context.Context,
 	symbol string,
@@ -70,17 +72,17 @@ func (c Client) PutCancelorder(
 }
 
 // 取得する商品
-// |定義値|説明|
-// |-|-|
-// |0|すべて|
-// |1|現物|
-// |2|信用|
-// |3|先物|
-// |4|OP|
+// |定義値|説明   |
+// |------|-------|
+// |0     |すべて |
+// |1     |現物   |
+// |2     |信用   |
+// |3     |先物   |
+// |4     |OP     |
 type GetOrdersQueryProduct string
 
 const (
-	// |0|すべて|
+	// |0|すべて |
 	GetOrdersQueryProductすべて GetOrdersQueryProduct = "0"
 	// |1|現物|
 	GetOrdersQueryProduct現物 GetOrdersQueryProduct = "1"
@@ -93,10 +95,10 @@ const (
 )
 
 // 注文詳細抑止
-// |定義値|説明|
-// |-|-|
-// |true|注文詳細を出力する（デフォルト）|
-// |false|注文詳細の出力しない|
+// |定義値|説明                            |
+// |------|--------------------------------|
+// |true  |注文詳細を出力する（デフォルト）|
+// |false |注文詳細の出力しない            |
 type GetOrdersQueryDetails string
 
 const (
@@ -111,13 +113,13 @@ const (
 // ※指定された状態と一致する注文のみレスポンスします。
 // ※フィルタには数字の入力のみ受け付けます。
 // ※複数の状態を指定することはできません。
-// |定義値|説明|
-// |-|-|
-// |1|待機（発注待機）|
-// |2|処理中（発注送信中）|
-// |3|処理済（発注済・訂正済）|
-// |4|訂正取消送信中|
-// |5|終了（発注エラー・取消済・全約定・失効・期限切れ）|
+// |定義値|説明                                              |
+// |------|--------------------------------------------------|
+// |1     |待機（発注待機）                                  |
+// |2     |処理中（発注送信中）                              |
+// |3     |処理済（発注済・訂正済）                          |
+// |4     |訂正取消送信中                                    |
+// |5     |終了（発注エラー・取消済・全約定・失効・期限切れ）|
 type GetOrdersQueryState string
 
 const (
@@ -139,9 +141,9 @@ const (
 // ※フィルタには数字の入力のみ受け付けます。
 // ※複数の売買区分を指定することができません。
 // |定義値|説明|
-// |-|-|
-// |1|売|
-// |2|買|
+// |------|----|
+// |1     |売  |
+// |2     |買  |
 type GetOrdersQuerySide string
 
 const (
@@ -157,9 +159,11 @@ const (
 // ※フィルタには数字の入力のみ受け付けます。
 // ※複数の取引区分を指定することができません。
 // |定義値|説明|
-// |-|-|
-// |2|新規|
-// |3|返済|
+// |------|----|
+// |2     |新規|
+// |3     |返済|
+//
+//
 type GetOrdersQueryCashmargin string
 
 const (
@@ -172,13 +176,13 @@ const (
 // GetOrdersQuery is definition of GetOrdersQuery.
 type GetOrdersQuery struct {
 	// 取得する商品
-	// |定義値|説明|
-	// |-|-|
-	// |0|すべて|
-	// |1|現物|
-	// |2|信用|
-	// |3|先物|
-	// |4|OP|
+	// |定義値|説明   |
+	// |------|-------|
+	// |0     |すべて |
+	// |1     |現物   |
+	// |2     |信用   |
+	// |3     |先物   |
+	// |4     |OP     |
 	Product *GetOrdersQueryProduct `json:"product"`
 	// 注文番号
 	// ※指定された注文番号と一致する注文のみレスポンスします。
@@ -191,10 +195,10 @@ type GetOrdersQuery struct {
 	// ※複数の更新日時を指定することはできません。
 	Updtime *string `json:"updtime"`
 	// 注文詳細抑止
-	// |定義値|説明|
-	// |-|-|
-	// |true|注文詳細を出力する（デフォルト）|
-	// |false|注文詳細の出力しない|
+	// |定義値|説明                            |
+	// |------|--------------------------------|
+	// |true  |注文詳細を出力する（デフォルト）|
+	// |false |注文詳細の出力しない            |
 	Details *GetOrdersQueryDetails `json:"details"`
 	// 銘柄コード
 	// ※指定された銘柄コードと一致する注文のみレスポンスします。
@@ -205,13 +209,13 @@ type GetOrdersQuery struct {
 	// ※指定された状態と一致する注文のみレスポンスします。
 	// ※フィルタには数字の入力のみ受け付けます。
 	// ※複数の状態を指定することはできません。
-	// |定義値|説明|
-	// |-|-|
-	// |1|待機（発注待機）|
-	// |2|処理中（発注送信中）|
-	// |3|処理済（発注済・訂正済）|
-	// |4|訂正取消送信中|
-	// |5|終了（発注エラー・取消済・全約定・失効・期限切れ）|
+	// |定義値|説明                                              |
+	// |------|--------------------------------------------------|
+	// |1     |待機（発注待機）                                  |
+	// |2     |処理中（発注送信中）                              |
+	// |3     |処理済（発注済・訂正済）                          |
+	// |4     |訂正取消送信中                                    |
+	// |5     |終了（発注エラー・取消済・全約定・失効・期限切れ）|
 	State *GetOrdersQueryState `json:"state"`
 	// 売買区分
 	//
@@ -219,9 +223,9 @@ type GetOrdersQuery struct {
 	// ※フィルタには数字の入力のみ受け付けます。
 	// ※複数の売買区分を指定することができません。
 	// |定義値|説明|
-	// |-|-|
-	// |1|売|
-	// |2|買|
+	// |------|----|
+	// |1     |売  |
+	// |2     |買  |
 	Side *GetOrdersQuerySide `json:"side"`
 	// 取引区分
 	//
@@ -229,9 +233,11 @@ type GetOrdersQuery struct {
 	// ※フィルタには数字の入力のみ受け付けます。
 	// ※複数の取引区分を指定することができません。
 	// |定義値|説明|
-	// |-|-|
-	// |2|新規|
-	// |3|返済|
+	// |------|----|
+	// |2     |新規|
+	// |3     |返済|
+	//
+	//
 	Cashmargin *GetOrdersQueryCashmargin `json:"cashmargin"`
 }
 
@@ -274,13 +280,13 @@ func (c Client) GetOrders(
 }
 
 // 取得する商品
-// |定義値|説明|
-// |-|-|
-// |0|すべて|
-// |1|現物|
-// |2|信用|
-// |3|先物|
-// |4|OP|
+// |定義値|説明  |
+// |------|------|
+// |0     |すべて|
+// |1     |現物  |
+// |2     |信用  |
+// |3     |先物  |
+// |4     |OP    |
 type GetPositionsQueryProduct string
 
 const (
@@ -299,13 +305,13 @@ const (
 // GetPositionsQuery is definition of GetPositionsQuery.
 type GetPositionsQuery struct {
 	// 取得する商品
-	// |定義値|説明|
-	// |-|-|
-	// |0|すべて|
-	// |1|現物|
-	// |2|信用|
-	// |3|先物|
-	// |4|OP|
+	// |定義値|説明  |
+	// |------|------|
+	// |0     |すべて|
+	// |1     |現物  |
+	// |2     |信用  |
+	// |3     |先物  |
+	// |4     |OP    |
 	Product *GetPositionsQueryProduct `json:"product"`
 	// 銘柄コード
 	// ※指定された銘柄コードと一致するポジションのみレスポンスします。
@@ -385,15 +391,15 @@ func (c Client) PostSendorderOption(
 }
 
 // 市場コード
-// |定義値|説明|
-// |-|-|
-// |1|東証|
-// |3|名証|
-// |5|福証|
-// |6|札証|
-// |2|日通し|
-// |23|日中|
-// |24|夜間|
+// |定義値|説明  |
+// |------|------|
+// |1     |東証  |
+// |3     |名証  |
+// |5     |福証  |
+// |6     |札証  |
+// |2     |日通し|
+// |23    |日中  |
+// |24    |夜間  |
 type GetSymbolOfParamExchange string
 
 const (
@@ -435,18 +441,18 @@ func (c Client) GetSymbolOf(
 
 // 先物コード
 // ※大文字小文字は区別しません。
-// |定義値|説明|
-// |-|-|
-// |NK225|日経平均先物|
-// |NK225mini|日経225mini先物|
-// |TOPIX|TOPIX先物|
-// |TOPIXmini|ミニTOPIX先物|
-// |MOTHERS|東証マザーズ先物|
-// |JPX400|JPX日経400先物|
-// |DOW|NYダウ先物|
-// |VI|日経平均VI先物|
-// |Core30|TOPIX Core30先物|
-// |REIT|東証REIT指数先物|
+// |定義値   |説明            |
+// |---------|----------------|
+// |NK225    |日経平均先物    |
+// |NK225mini|日経225mini先物 |
+// |TOPIX    |TOPIX先物       |
+// |TOPIXmini|ミニTOPIX先物   |
+// |MOTHERS  |東証マザーズ先物|
+// |JPX400   |JPX日経400先物  |
+// |DOW      |NYダウ先物      |
+// |VI       |日経平均VI先物  |
+// |Core30   |TOPIX Core30先物|
+// |REIT     |東証REIT指数先物|
 type GetSymbolnameFutureQueryFutureCode string
 
 const (
@@ -476,19 +482,19 @@ const (
 type GetSymbolnameFutureQuery struct {
 	// 先物コード
 	// ※大文字小文字は区別しません。
-	// |定義値|説明|
-	// |-|-|
-	// |NK225|日経平均先物|
-	// |NK225mini|日経225mini先物|
-	// |TOPIX|TOPIX先物|
-	// |TOPIXmini|ミニTOPIX先物|
-	// |MOTHERS|東証マザーズ先物|
-	// |JPX400|JPX日経400先物|
-	// |DOW|NYダウ先物|
-	// |VI|日経平均VI先物|
-	// |Core30|TOPIX Core30先物|
-	// |REIT|東証REIT指数先物|
-	FutureCode GetSymbolnameFutureQueryFutureCode `json:"FutureCode"`
+	// |定義値   |説明            |
+	// |---------|----------------|
+	// |NK225    |日経平均先物    |
+	// |NK225mini|日経225mini先物 |
+	// |TOPIX    |TOPIX先物       |
+	// |TOPIXmini|ミニTOPIX先物   |
+	// |MOTHERS  |東証マザーズ先物|
+	// |JPX400   |JPX日経400先物  |
+	// |DOW      |NYダウ先物      |
+	// |VI       |日経平均VI先物  |
+	// |Core30   |TOPIX Core30先物|
+	// |REIT     |東証REIT指数先物|
+	FutureCode *GetSymbolnameFutureQueryFutureCode `json:"FutureCode"`
 	// 限月
 	// ※限月はyyyyMM形式で指定します。0を指定した場合、直近限月となります。
 	// ※取引最終日に「0」（直近限月）を指定した場合、日中・夜間の時間帯に関わらず、取引最終日を迎える限月の銘柄コードを返します。取引最終日を迎える銘柄の取引は日中取引をもって終了となりますので、ご注意ください。
@@ -504,7 +510,9 @@ func (c Client) GetSymbolnameFuture(
 	pat := "/symbolname/future"
 	res := SymbolNameSuccess{}
 	q := url.Values{}
-	q.Add("FutureCode", string(req.FutureCode))
+	if req.FutureCode != nil {
+		q.Add("FutureCode", string(*req.FutureCode))
+	}
 	q.Add("DerivMonth", strconv.Itoa(int(req.DerivMonth)))
 	err := c.getRequest(ctx, pat, q, &res)
 	return res, err
@@ -513,9 +521,9 @@ func (c Client) GetSymbolnameFuture(
 // コール or プット
 // ※大文字小文字は区別しません。
 // |定義値|説明|
-// |-|-|
-// |P|PUT|
-// |C|CALL|
+// |------|----|
+// |P     |PUT |
+// |C     |CALL|
 type GetSymbolnameOptionQueryPutOrCall string
 
 const (
@@ -534,9 +542,9 @@ type GetSymbolnameOptionQuery struct {
 	// コール or プット
 	// ※大文字小文字は区別しません。
 	// |定義値|説明|
-	// |-|-|
-	// |P|PUT|
-	// |C|CALL|
+	// |------|----|
+	// |P     |PUT |
+	// |C     |CALL|
 	PutOrCall GetSymbolnameOptionQueryPutOrCall `json:"PutOrCall"`
 	// 権利行使価格
 	// ※0を指定した場合、APIを実行した時点でのATMとなります。
@@ -544,7 +552,7 @@ type GetSymbolnameOptionQuery struct {
 }
 
 // オプション銘柄コード取得
-// オプション銘柄コード取得
+// オプション銘柄コード取得"
 func (c Client) GetSymbolnameOption(
 	ctx context.Context,
 	req GetSymbolnameOptionQuery,
@@ -614,11 +622,11 @@ func (c Client) GetWalletCash(
 
 // 市場コード
 // |定義値|説明|
-// |-|-|
-// |1|東証|
-// |3|名証|
-// |5|福証|
-// |6|札証|
+// |------|----|
+// |1     |東証|
+// |3     |名証|
+// |5     |福証|
+// |6     |札証|
 type GetWalletCashOfParamExchange string
 
 const (
@@ -665,11 +673,11 @@ func (c Client) GetWalletFuture(
 }
 
 // 市場コード
-// |定義値|説明|
-// |-|-|
-// |2|日通し|
-// |23|日中|
-// |24|夜間|
+// |定義値|説明  |
+// |------|------|
+// |2     |日通し|
+// |23    |日中  |
+// |24    |夜間  |
 type GetWalletFutureOfParamExchange string
 
 const (
@@ -715,9 +723,9 @@ func (c Client) GetWalletMargin(
 
 // 市場コード
 // |定義値|説明|
-// |-|-|
-// |1|東証|
-// |3|名証|
+// |------|----|
+// |1     |東証|
+// |3     |名証|
 type GetWalletMarginOfParamExchange string
 
 const (
@@ -760,11 +768,11 @@ func (c Client) GetWalletOption(
 }
 
 // 市場コード
-// |定義値|説明|
-// |-|-|
-// |2|日通し|
-// |23|日中|
-// |24|夜間|
+// |定義値|説明  |
+// |------|------|
+// |2     |日通し|
+// |23    |日中  |
+// |24    |夜間  |
 type GetWalletOptionOfParamExchange string
 
 const (

@@ -12,20 +12,32 @@ type YAMLDoc struct {
 		Summary     string
 		Description string
 		Parameters  []struct {
-			In     string
-			Schema struct {
-				Ref string `yaml:"$ref"`
-			}
-			YAMLObjectDef `yaml:",inline"`
+			In          string
+			Name        string
+			Description string
+			Schema      YAMLSchemaDef
+			Required    bool
 		}
+		RequestBody struct {
+			Required bool
+			Content  map[ /* content type */ string]struct {
+				Schema struct {
+					Ref string `yaml:"$ref"`
+				}
+			}
+		} `yaml:"requestBody"`
 		Responses map[ /* status code */ string]struct {
 			Description string
-			Schema      struct {
-				Ref string `yaml:"$ref"`
+			Content     map[ /* content type */ string]struct {
+				Schema struct {
+					Ref string `yaml:"$ref"`
+				}
 			}
 		}
 	}
-	Definitions YAMLObjectDefs
+	Components struct {
+		Schemas YAMLSchemaDefs
+	}
 }
 
 // bool or []string
@@ -57,7 +69,7 @@ func (m *YAMLRequiredUnmarshaller) UnmarshalYAML(node *yaml.Node) error {
 	}
 }
 
-type YAMLObjectDef struct {
+type YAMLSchemaDef struct {
 	Name        string
 	Type        string
 	Required    YAMLRequiredUnmarshaller
@@ -65,27 +77,27 @@ type YAMLObjectDef struct {
 	Format      string
 	Example     interface{}
 	// if type is object
-	Properties YAMLObjectDefs
+	Properties YAMLSchemaDefs
 	// if type is array
-	Items *YAMLObjectDef
+	Items *YAMLSchemaDef
 	Ref   RefDef `yaml:"$ref"`
 }
 
-type YAMLObjectDefs []YAMLObjectDef
+type YAMLSchemaDefs []YAMLSchemaDef
 
-func (d *YAMLObjectDefs) UnmarshalYAML(node *yaml.Node) error {
+func (d *YAMLSchemaDefs) UnmarshalYAML(node *yaml.Node) error {
 	switch node.Kind {
 	case 0:
 		return nil
 	case yaml.MappingNode:
-		list := make(YAMLObjectDefs, 0, len(node.Content)/2)
+		list := make(YAMLSchemaDefs, 0, len(node.Content)/2)
 		for i := 0; i < len(node.Content); i += 2 {
-			var v YAMLObjectDef
+			var v YAMLSchemaDef
 			if err := node.Content[i+1].Decode(&v); err != nil {
-				return fmt.Errorf("failed to decode in YAMLObjectDefs.UnmarshalYAML with YAMLObjectDef type: yamlNode: %+v: %w", node, err)
+				return fmt.Errorf("failed to decode in YAMLSchemaDefs.UnmarshalYAML with YAMLSchemaDef type: yamlNode: %+v: %w", node, err)
 			}
 			if err := node.Content[i].Decode(&v.Name); err != nil {
-				return fmt.Errorf("failed to decode in YAMLObjectDefs.UnmarshalYAML with YAMLObjectDef.Name: yamlNode: %+v: %w", node, err)
+				return fmt.Errorf("failed to decode in YAMLSchemaDefs.UnmarshalYAML with YAMLSchemaDef.Name: yamlNode: %+v: %w", node, err)
 			}
 			list = append(list, v)
 		}

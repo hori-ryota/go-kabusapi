@@ -1,10 +1,13 @@
 package main
 
 import (
+	"bufio"
+	"bytes"
 	"flag"
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 )
 
 func main() {
@@ -30,7 +33,25 @@ func generate() error {
 	}
 	defer docResp.Body.Close()
 
-	doc, err := ParseKabusAPIDocument(docResp.Body)
+	// NOTE: 下記のバグの修正のためyamlを置換する。直ったら戻す
+	// [【不具合】schema定義のenum系descriptionが複数行定義になっていない · Issue \#235 · kabucom/kabusapi](https://github.com/kabucom/kabusapi/issues/235)
+	body := new(bytes.Buffer)
+	scanner := bufio.NewScanner(docResp.Body)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.Contains(line, "description:") {
+			if !strings.Contains(line, "description: |-") {
+				lineHead := strings.Index(line, "description:")
+				fmt.Fprintln(body, strings.Repeat(" ", lineHead)+"description: |-")
+				fmt.Fprintln(body, strings.Repeat(" ", lineHead+2)+line[lineHead+len("description: "):])
+				continue
+			}
+		}
+		fmt.Fprintln(body, scanner.Text())
+	}
+	doc, err := ParseKabusAPIDocument(body)
+
+	// doc, err := ParseKabusAPIDocument(docResp.Body)
 	if err != nil {
 		return fmt.Errorf("failed to parse document: %w", err)
 	}

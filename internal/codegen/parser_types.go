@@ -68,7 +68,7 @@ const (
 type RefDef string
 
 func (s RefDef) ToGoType() string {
-	return strings.TrimPrefix(string(s), "#/definitions/")
+	return strings.TrimPrefix(string(s), "#/components/schemas/")
 }
 
 type MethodDef struct {
