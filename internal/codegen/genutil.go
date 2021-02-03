@@ -84,11 +84,6 @@ func htmlTableToMarkdown(text string) string {
 		tableRows := make([][]string, 0, len(lines))
 		for {
 			i++
-			if i == len(lines) {
-				// NOTE: 閉じタグ漏れのバグ対応。直ったら消す
-				// [【不具合】schema定義のenum系descriptionが複数行定義になっていない · Issue \#235 · kabucom/kabusapi](https://github.com/kabucom/kabusapi/issues/235#issuecomment-769665622)
-				break
-			}
 			l := lines[i]
 			l = strings.TrimSpace(l)
 			if l == "</table>" {
@@ -97,6 +92,15 @@ func htmlTableToMarkdown(text string) string {
 			if l == "<thead>" || l == "</thead>" || l == "<tbody>" || l == "</tbody>" {
 				continue
 			}
+			if !strings.Contains(l, "<tr>") {
+				continue
+			}
+			for !strings.Contains(lines[i], "</tr>") {
+				// convert table row to one line text
+				i++
+				l += strings.TrimSpace(lines[i])
+			}
+
 			l = strings.ReplaceAll(l, "<br>", " ")
 			if strings.Contains(l, "<th>") {
 				l = strings.ReplaceAll(l, "<tr><th>", "")

@@ -162,7 +162,20 @@ func parseEnum(yd YAMLSchemaDef, prefix string) (EnumDef, error) {
 		if strings.Contains(scanner.Text(), "</tbody>") {
 			break
 		}
-		vv := strings.Split(scanner.Text(), "</td>")
+		line := strings.TrimSpace(scanner.Text())
+		if !strings.Contains(line, "<tr>") {
+			continue
+		}
+		// convert table row to one line text
+		l := line
+		for !strings.Contains(line, "</tr>") {
+			if !scanner.Scan() {
+				break
+			}
+			line = strings.TrimSpace(scanner.Text())
+			l += line
+		}
+		vv := strings.Split(l, "</td>")
 		for i, v := range vv {
 			v = strings.TrimSpace(v)
 			v = strings.ReplaceAll(v, "<tr>", "")
@@ -173,7 +186,7 @@ func parseEnum(yd YAMLSchemaDef, prefix string) (EnumDef, error) {
 		enums = append(enums, EnumValue{
 			Name:        vv[1],
 			Value:       vv[0],
-			Description: scanner.Text(),
+			Description: l,
 		})
 	}
 	baseType, err := YAMLSchemaDefToTypeDef(YAMLSchemaDef{

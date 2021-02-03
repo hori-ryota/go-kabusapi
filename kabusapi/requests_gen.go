@@ -45,8 +45,7 @@ func (e GetBoardOfParamExchange) P() *GetBoardOfParamExchange {
 
 // 時価情報・板情報
 // 指定した銘柄の時価情報・板情報を取得します
-// レスポンスの一部にnullが発生した場合、該当銘柄を銘柄登録をしてから、
-// 再度時価情報・板情報APIを実行してください。
+// レスポンスの一部にnullが発生した場合、該当銘柄を銘柄登録をしてから、再度時価情報・板情報APIを実行してください。
 func (c Client) GetBoardOf(
 	ctx context.Context,
 	symbol string,
@@ -109,7 +108,6 @@ const (
 )
 
 // 状態
-//
 // ※指定された状態と一致する注文のみレスポンスします。
 // ※フィルタには数字の入力のみ受け付けます。
 // ※複数の状態を指定することはできません。
@@ -136,7 +134,6 @@ const (
 )
 
 // 売買区分
-//
 // ※指定された売買区分と一致する注文のみレスポンスします。
 // ※フィルタには数字の入力のみ受け付けます。
 // ※複数の売買区分を指定することができません。
@@ -154,7 +151,6 @@ const (
 )
 
 // 取引区分
-//
 // ※指定された取引区分と一致する注文のみレスポンスします。
 // ※フィルタには数字の入力のみ受け付けます。
 // ※複数の取引区分を指定することができません。
@@ -162,8 +158,6 @@ const (
 // |------|----|
 // |2     |新規|
 // |3     |返済|
-//
-//
 type GetOrdersQueryCashmargin string
 
 const (
@@ -205,7 +199,6 @@ type GetOrdersQuery struct {
 	// ※複数の銘柄コードを指定することができません。
 	Symbol *string `json:"symbol"`
 	// 状態
-	//
 	// ※指定された状態と一致する注文のみレスポンスします。
 	// ※フィルタには数字の入力のみ受け付けます。
 	// ※複数の状態を指定することはできません。
@@ -218,7 +211,6 @@ type GetOrdersQuery struct {
 	// |5     |終了（発注エラー・取消済・全約定・失効・期限切れ）|
 	State *GetOrdersQueryState `json:"state"`
 	// 売買区分
-	//
 	// ※指定された売買区分と一致する注文のみレスポンスします。
 	// ※フィルタには数字の入力のみ受け付けます。
 	// ※複数の売買区分を指定することができません。
@@ -228,7 +220,6 @@ type GetOrdersQuery struct {
 	// |2     |買  |
 	Side *GetOrdersQuerySide `json:"side"`
 	// 取引区分
-	//
 	// ※指定された取引区分と一致する注文のみレスポンスします。
 	// ※フィルタには数字の入力のみ受け付けます。
 	// ※複数の取引区分を指定することができません。
@@ -236,8 +227,6 @@ type GetOrdersQuery struct {
 	// |------|----|
 	// |2     |新規|
 	// |3     |返済|
-	//
-	//
 	Cashmargin *GetOrdersQueryCashmargin `json:"cashmargin"`
 }
 
@@ -497,7 +486,8 @@ type GetSymbolnameFutureQuery struct {
 	FutureCode *GetSymbolnameFutureQueryFutureCode `json:"FutureCode"`
 	// 限月
 	// ※限月はyyyyMM形式で指定します。0を指定した場合、直近限月となります。
-	// ※取引最終日に「0」（直近限月）を指定した場合、日中・夜間の時間帯に関わらず、取引最終日を迎える限月の銘柄コードを返します。取引最終日を迎える銘柄の取引は日中取引をもって終了となりますので、ご注意ください。
+	// ※取引最終日に「0」（直近限月）を指定した場合、日中・夜間の時間帯に関わらず、
+	// 取引最終日を迎える限月の銘柄コードを返します。取引最終日を迎える銘柄の取引は日中取引をもって終了となりますので、ご注意ください。
 	DerivMonth int32 `json:"DerivMonth"`
 }
 
@@ -552,7 +542,7 @@ type GetSymbolnameOptionQuery struct {
 }
 
 // オプション銘柄コード取得
-// オプション銘柄コード取得"
+// オプション銘柄コード取得
 func (c Client) GetSymbolnameOption(
 	ctx context.Context,
 	req GetSymbolnameOptionQuery,
