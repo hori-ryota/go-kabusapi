@@ -2,41 +2,41 @@ package kabusapi
 
 import "golang.org/x/net/websocket"
 
-func (c Client) SubscribePushStream() *PushStreamScanner {
-	return NewPushStreamScanner(c.pushBaseURL.String())
+type PushStreamReceiver struct {
+	ws *websocket.Conn
 }
 
-func NewPushStreamScanner(url string) *PushStreamScanner {
+func NewPushStreamReceiver(url string) (*PushStreamReceiver, error) {
 	ws, err := websocket.Dial(url, "", "http://example.com")
-	return &PushStreamScanner{
-		ws:  ws,
-		err: err,
+	if err != nil {
+		return nil, err
 	}
+	return &PushStreamReceiver{
+		ws: ws,
+	}, nil
 }
 
-type PushStreamScanner struct {
-	ws   *websocket.Conn
-	err  error
-	data BoardSuccess
+func (c Client) SubscribePushStream() (*PushStreamReceiver, error) {
+	return NewPushStreamReceiver(c.pushBaseURL.String())
 }
 
-func (s *PushStreamScanner) Data() BoardSuccess {
-	return s.data
-}
-
-func (s *PushStreamScanner) Err() error {
-	return s.err
-}
-
-func (s *PushStreamScanner) Scan() bool {
-	if s.err != nil {
-		return false
+func (s *PushStreamReceiver) ReceiveMessage() ([]byte, error) {
+	var data []byte
+	if err := websocket.Message.Receive(s.ws, &data); err != nil {
+		return nil, err
 	}
-	s.err = websocket.JSON.Receive(s.ws, &s.data)
-	return s.err == nil
+	return data, nil
 }
 
-func (s *PushStreamScanner) Close() error {
+func (s *PushStreamReceiver) Receive() (BoardSuccess, error) {
+	var data BoardSuccess
+	if err := websocket.JSON.Receive(s.ws, &data); err != nil {
+		return BoardSuccess{}, err
+	}
+	return data, nil
+}
+
+func (s *PushStreamReceiver) Close() error {
 	if s.ws == nil {
 		return nil
 	}
